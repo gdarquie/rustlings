@@ -14,7 +14,7 @@
 
 // Execute `rustlings hint hashmaps3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+// I AM DONE
 
 use std::collections::HashMap;
 
@@ -29,7 +29,7 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
     // The name of the team is the key and its associated struct is the value.
     let mut scores: HashMap<String, Team> = HashMap::new();
 
-    for r in results.lines() {
+    for r in results.lines() {                                                                                                                
         let v: Vec<&str> = r.split(',').collect();
         let team_1_name = v[0].to_string();
         let team_1_score: u8 = v[2].parse().unwrap();
@@ -42,49 +42,41 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
         // goals scored by team_2 will be the number of goals conceded by
         // team_1.
 
-        let mut team1 = Team {
-            name: team_1_name.clone(),
-            goals_scored: team_1_score.clone(),
-            goals_conceded: team_2_score.clone(),
-        };
+        let mut team_1 = scores.get(&team_1_name);
 
-        let mut temp_team_1 = scores.get(&team_1_name);
-
-        if temp_team_1.is_none() {
-            scores.insert(team_1_name, team1);
-        } else {
-            let temp2 = temp_team_1.unwrap();
-
-            let temp3 = Team {
+        if team_1.is_none() {
+            scores.insert(team_1_name.clone(), Team {
                 name: team_1_name.clone(),
-                goals_scored: temp2.goals_scored.clone() + team_1_score.clone(),
-                goals_conceded: temp2.goals_conceded.clone() + team_2_score.clone(),
-            };
-            scores.insert(team_1_name, temp3);
-        }
-
-        let mut team2 = Team {
-            name: team_2_name.clone(),
-            goals_scored: team_2_score.clone(),
-            goals_conceded: team_1_score.clone(),
-        };
-
-        let mut temp_team_2 = scores.get(&team_2_name);
-
-        if temp_team_2.is_none() {
-            scores.insert(team_2_name, team2);
+                goals_scored: team_1_score.clone(),
+                goals_conceded: team_2_score.clone(),
+            });
         } else {
-            let temp2 = temp_team_2.unwrap();
+            let existing_team_1 = team_1.unwrap();
 
-            let temp3 = Team {
-                name: team_2_name.clone(),
-                goals_scored: temp2.goals_scored.clone() + team_2_score.clone(),
-                goals_conceded: temp2.goals_conceded.clone() + team_1_score.clone(),
-            };
-            scores.insert(team_2_name, temp3);
+            scores.insert(team_1_name.clone(), Team {
+                name: team_1_name.clone(),
+                goals_scored: existing_team_1.goals_scored.clone() + team_1_score.clone(),
+                goals_conceded: existing_team_1.goals_conceded.clone() + team_2_score.clone(),
+            });
         }
 
+        let mut team_2 = scores.get(&team_2_name);
 
+        if team_2.is_none() {
+            scores.insert(team_2_name.clone(), Team {
+                name: team_2_name.clone(),
+                goals_scored: team_2_score.clone(),
+                goals_conceded: team_1_score.clone(),
+            });
+        } else {
+            let existing_team_2 = team_2.unwrap();
+
+            scores.insert(team_2_name.clone(), Team {
+                name: team_2_name.clone(),
+                goals_scored: existing_team_2.goals_scored.clone() + team_2_score.clone(),
+                goals_conceded: existing_team_2.goals_conceded.clone() + team_1_score.clone(),
+            });
+        }
     }
     scores
 }
