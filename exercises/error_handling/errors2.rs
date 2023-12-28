@@ -17,7 +17,7 @@
 // one is a lot shorter!
 // Execute `rustlings hint errors2` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+// I AM DONE
 
 use std::num::ParseIntError;
 
